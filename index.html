@@ -18,7 +18,7 @@
 
     <script>
         async function fetchProductData() {
-            const sheetUrl = https://docs.google.com/spreadsheets/d/e/2PACX-1vSGQh_Nv_DtmFplg_B82wmuN4SuNlG1fhKbOhRPlGHvnQQwgU7tc3L0lmrEzhTGp5bzEVTkNAhw1rBJ/pub?output=csv; // Replace with your published CSV link
+            const sheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSGQh_Nv_DtmFplg_B82wmuN4SuNlG1fhKbOhRPlGHvnQQwgU7tc3L0lmrEzhTGp5bzEVTkNAhw1rBJ/pub?output=csv"; // Replace with your published CSV link
             const response = await fetch(sheetUrl);
             const data = await response.text();
             const rows = data.split("\n").slice(1); // Skip header row

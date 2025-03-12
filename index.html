@@ -1,47 +1,27 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Product Catalog</title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 20px; text-align: center; }
-        .container { display: flex; flex-wrap: wrap; justify-content: center; }
-        .card { border: 1px solid #ddd; padding: 10px; margin: 10px; width: 300px; border-radius: 8px; }
-        img { max-width: 100%; border-radius: 8px; }
-    </style>
-</head>
-<body>
+const sheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSGQh_Nv_DtmFplg_B82wmuN4SuNlG1fhKbOhRPlGHvnQQwgU7tc3L0lmrEzhTGp5bzEVTkNAhw1rBJ/pub?output=csv"; // Your Google Sheets CSV link
 
-    <h1>Product Catalog</h1>
-    <div class="container" id="product-list"></div>
+const currentPage = "page1"; // Change this dynamically based on which page you're on
 
-    <script>
-        async function fetchProductData() {
-            const sheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSGQh_Nv_DtmFplg_B82wmuN4SuNlG1fhKbOhRPlGHvnQQwgU7tc3L0lmrEzhTGp5bzEVTkNAhw1rBJ/pub?output=csv"; // Replace with your published CSV link
-            const response = await fetch(sheetUrl);
-            const data = await response.text();
-            const rows = data.split("\n").slice(1); // Skip header row
+fetch(sheetUrl)
+  .then(response => response.text())
+  .then(data => {
+    const rows = data.split("\n").slice(1); // Remove header row
+    const filteredRows = rows
+      .map(row => row.split(","))
+      .filter(cols => cols[4]?.trim() === currentPage); // Filter by Page column
 
-            let html = "";
-            rows.forEach(row => {
-                const [imageUrl, title, description, price] = row.split(",");
+    let output = "";
+    filteredRows.forEach(cols => {
+      output += `
+        <div class="product">
+          <img src="${cols[0]}" alt="${cols[1]}">
+          <h2>${cols[1]}</h2>
+          <p>${cols[2]}</p>
+          <p>Price: $${cols[3]}</p>
+        </div>
+      `;
+    });
 
-                html += `
-                    <div class="card">
-                        <img src="${imageUrl}" alt="${title}">
-                        <h2>${title}</h2>
-                        <p>${description}</p>
-                        <p><strong>Price:</strong> $${price}</p>
-                    </div>
-                `;
-            });
-
-            document.getElementById("product-list").innerHTML = html;
-        }
-
-        fetchProductData();
-    </script>
-
-</body>
-</html>
+    document.getElementById("product-container").innerHTML = output;
+  })
+  .catch(error => console.error("Error loading data:", error));

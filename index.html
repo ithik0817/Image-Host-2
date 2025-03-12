@@ -1,15 +1,15 @@
 const sheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSGQh_Nv_DtmFplg_B82wmuN4SuNlG1fhKbOhRPlGHvnQQwgU7tc3L0lmrEzhTGp5bzEVTkNAhw1rBJ/pub?output=csv";
 
-const currentPage = "page1"; // Change dynamically
+const currentPage = "page1"; // Change dynamically based on the page
 
 fetch(sheetUrl)
   .then(response => response.text())
   .then(data => {
-    console.log("Raw CSV Data:", data); // Debugging
+    console.log("Raw CSV Data:", data); // Debugging step
 
     const rows = data.split("\n").slice(1); // Remove header row
     const filteredRows = rows
-      .map(row => row.match(/(".*?"|[^",]+)(?=\s*,|\s*$)/g)) // Safer CSV parsing
+      .map(row => row.match(/(".*?"|[^",]+)(?=\s*,|\s*$)/g)) // Handles commas inside text
       .filter(cols => cols && cols[4]?.trim().replace(/"/g, '') === currentPage); // Filter by Page column
 
     let output = "";

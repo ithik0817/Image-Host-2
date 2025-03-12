@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Image Catalog</title>
+    <title>Product Catalog</title>
     <style>
         body { font-family: Arial, sans-serif; margin: 20px; text-align: center; }
         .container { display: flex; flex-wrap: wrap; justify-content: center; }
@@ -13,15 +13,35 @@
 </head>
 <body>
 
-    <h1>Image Catalog</h1>
-    <div class="container">
-        <div class="card">
-            <img src="https://raw.githubusercontent.com/ithik0817/Image-Host-2/refs/heads/main/Corvette-Logo.png" alt="Product Image">
-            <h2>Product Title</h2>
-            <p>Description of the product.</p>
-            <p><strong>Price:</strong> $0.00</p>
-        </div>
-    </div>
+    <h1>Product Catalog</h1>
+    <div class="container" id="product-list"></div>
+
+    <script>
+        async function fetchProductData() {
+            const sheetUrl = "YOUR_GOOGLE_SHEET_CSV_LINK"; // Replace with your published CSV link
+            const response = await fetch(sheetUrl);
+            const data = await response.text();
+            const rows = data.split("\n").slice(1); // Skip header row
+
+            let html = "";
+            rows.forEach(row => {
+                const [imageUrl, title, description, price] = row.split(",");
+
+                html += `
+                    <div class="card">
+                        <img src="${imageUrl}" alt="${title}">
+                        <h2>${title}</h2>
+                        <p>${description}</p>
+                        <p><strong>Price:</strong> $${price}</p>
+                    </div>
+                `;
+            });
+
+            document.getElementById("product-list").innerHTML = html;
+        }
+
+        fetchProductData();
+    </script>
 
 </body>
 </html>

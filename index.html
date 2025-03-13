@@ -1,20 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="stylesheet" href="styles.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Product Page</title>
+    <title>Product List</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <h1>Product List</h1>
+    <div id="product-list"></div>
 
-    <h1>Welcome to My Product Page</h1>
+    <script>
+        const sheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSGQh_Nv_DtmFplg_B82wmuN4SuNlG1fhKbOhRPlGHvnQQwgU7tc3L0lmrEzhTGp5bzEVTkNAhw1rBJ/pub?output=csv"; // Replace with actual CSV link
 
-    <!-- Placeholder where products will be displayed -->
-    <div id="product-container"></div>
+        fetch(sheetUrl)
+            .then(response => response.text())
+            .then(data => {
+                const rows = data.split("\n").slice(1); // Remove header row
+                const products = rows.map(row => row.split(","));
 
-    <!-- Load JavaScript to fetch and display data -->
-    <script src="script.js"></script>
+                let output = "";
+                products.forEach((cols, index) => {
+                    const imageUrl = cols[0]?.trim();
+                    const title = cols[1]?.trim();
+                    output += `
+                        <div class="product">
+                            <a href="product.html?id=${index}">
+                                <img src="${imageUrl}" alt="${title}" width="100">
+                                <h2>${title}</h2>
+                            </a>
+                        </div>
+                    `;
+                });
 
+                document.getElementById("product-list").innerHTML = output;
+            })
+            .catch(error => console.error("Error loading data:", error));
+    </script>
 </body>
 </html>

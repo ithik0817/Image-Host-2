@@ -1,5 +1,5 @@
 .product img {
-  width: 200px; /* Adjust width as needed */
+  width: 1000px; /* Adjust width as needed */
   height: auto; /* Keeps aspect ratio */
   border-radius: 10px; /* Optional: Rounds the corners */
   display: block; /* Removes extra spacing */

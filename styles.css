@@ -1,7 +1,15 @@
+.product {
+    text-align: center;
+    margin: 20px;
+}
+
 .product img {
-  width: 1000px; /* Adjust width as needed */
-  height: auto; /* Keeps aspect ratio */
-  border-radius: 10px; /* Optional: Rounds the corners */
-  display: block; /* Removes extra spacing */
-  margin: 0 auto; /* Centers the image */
+    width: 1000px;
+    height: auto;
+    border-radius: 10px;
+}
+
+.product a {
+    text-decoration: none;
+    color: black;
 }

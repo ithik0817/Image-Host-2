@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Details</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <a href="index.html">← Back to Product List</a>
+    <div id="product-container"></div>
+
+    <script>
+        const sheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSGQh_Nv_DtmFplg_B82wmuN4SuNlG1fhKbOhRPlGHvnQQwgU7tc3L0lmrEzhTGp5bzEVTkNAhw1rBJ/pub?output=csv"; // Replace with actual CSV link
+        const urlParams = new URLSearchParams(window.location.search);
+        const productId = urlParams.get("id"); // Get product ID from URL
+
+        fetch(sheetUrl)
+            .then(response => response.text())
+            .then(data => {
+                const rows = data.split("\n").slice(1); // Remove header row
+                const products = rows.map(row => row.split(","));
+                
+                if (productId !== null && products[productId]) {
+                    const cols = products[productId]; // Get specific product row
+
+                    document.getElementById("product-container").innerHTML = `
+                        <div class="product">
+                            <img src="${cols[0].trim()}" alt="${cols[1].trim()}" width="200">
+                            <h2>${cols[1].trim()}</h2>
+                            <p>${cols[2].trim()}</p>
+                            <p>Price: $${cols[3].trim()}</p>
+                        </div>
+                    `;
+                } else {
+                    document.getElementById("product-container").innerHTML = `<p>Product not found.</p>`;
+                }
+            })
+            .catch(error => console.error("Error loading data:", error));
+    </script>
+</body>
+</html>
